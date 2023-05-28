@@ -4,6 +4,7 @@ const {
   getPokemonId,
   createPokemon,
 } = require("../controllers/pokemonController");
+const { Type } = require("../../db");
 
 //------- GET | /pokemons && GET | /pokemons/name?="..."
 const getPokemonHandler = async (req, res) => {
@@ -44,28 +45,51 @@ const getPokemonIdHandler = async (req, res) => {
     return res.status(400).send({ error: error.message });
   }
 };
-
 //-------  POST | /pokemons
 const createPokemonHandler = async (req, res) => {
-  const { name, sprites, hp, attack, defense, speed, height, weight } =
-    req.body;
+  const { name, sprites, hp, attack, defense, speed, height, weight, types } =
+    req.body;  
   try {
-    const newPokemon = await createPokemon(
-      name,
-      sprites,
-      hp,
-      attack,
-      defense,
-      speed,
-      height,
-      weight
-    );
-    res.send(`Un ${newPokemon.name} salvaje ha aparecido`);
+    if(!name|| !sprites|| !hp|| !attack|| !defense|| !speed|| !height|| !weight || !types){ // me aseguro que los datos existan
+      throw Error ("missing data");
+    }
+    let typeDB = await Type.findOne({ where: { name: types } });
+    if(typeDB){
+      const newPokemon = await createPokemon({
+        name,
+        sprites,
+        hp,
+        attack,
+        defense,
+        speed,
+        height,
+        weight,
+        types:typeDB.name
+      });
+      return res.status(201).json(newPokemon);
+    }
+    else{
+      const newType = await Type.create({name:types})
+      const newPokemon = await createPokemon({
+        name,
+        sprites,
+        hp,
+        attack,
+        defense,
+        speed,
+        height,
+        weight,
+        types:newType.name}
+      );
+      console.log(` aca newpokemon:  ${newPokemon}`);
+      return res.status(201).json(newPokemon);
+    }
   } catch (error) {
     //manejo si hay un error
-    return res.status(400).send({ error: error.message });
+    return res.status(400).json({ error: "error asd" });
   }
 };
+
 
 module.exports = {
   getPokemonHandler,
