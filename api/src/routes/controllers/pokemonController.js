@@ -47,17 +47,44 @@ const getPokemonsByName = async (PokeName) => {
     return pokeData(PokemonByName);
   }
 };
-const getPokemonId = async () => {};
+const getPokemonId = async (PokeId) => {
+  let PokemonByID = 0;
+  if (PokeId.length < 6) {
+    PokemonByID = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${PokeId}`
+    );
+    return pokeData(PokemonByID);
+  } else {
+    PokemonByID = await Pokemon.findOne({ where: { id: PokeId } });
+    return PokemonByID;
+  }
+};
 
 const createPokemon = async ({
-  name,  sprites,  hp,  attack,  defense,  speed,  height,  weight,  types
+  name,
+  sprites,
+  hp,
+  attack,
+  defense,
+  speed,
+  height,
+  weight,
+  types,
 }) => {
-    console.log(name);
+  console.log(name);
   let objPokemon = {
-    name,    sprites,    hp,    attack,    defense,    speed,    height,    weight,    types,
+    name,
+    sprites,
+    hp,
+    attack,
+    defense,
+    speed,
+    height,
+    weight,
+    types,
   };
   const newPokemon = await Pokemon.create(objPokemon);
-  return newPokemon;  
+  return newPokemon;
 };
 
 module.exports = {

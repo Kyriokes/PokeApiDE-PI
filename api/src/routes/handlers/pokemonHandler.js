@@ -86,7 +86,7 @@ const createPokemonHandler = async (req, res) => {
     }
   } catch (error) {
     //manejo si hay un error
-    return res.status(400).json({ error: "error asd" });
+    return res.status(400).json({ error: error.message });
   }
 };
 
