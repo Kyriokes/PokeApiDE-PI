@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size:100% 100%;
+    background-attachment:fixed ;
+    /* background: url(https://i.makeagif.com/media/5-19-2015/UdviaW.gif) no-repeat center center/cover; */
+    background: url(https://s11.gifyu.com/images/SuEc1.gif) no-repeat center center/cover;
+    
+}
+
+.button {
+    text-decoration-line: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: 800;
+    background: linear-gradient(to bottom,
+            red,
+            red,
+            white,
+            white);
+    font-size: larger;
+    font-style: normal;
+    margin: 5px;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: black;
+    width: 15vw;
+    height: 15vw;
+}
+.button:hover{
+    transition: 1s;
+    color: white;
+    text-shadow: 0 1px rgb(130, 141, 17)
+}

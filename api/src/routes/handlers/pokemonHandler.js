@@ -79,9 +79,8 @@ const createPokemonHandler = async (req, res) => {
         speed,
         height,
         weight,
-        types:newType.name}
-      );
-      console.log(` aca newpokemon:  ${newPokemon}`);
+        types:newType.name
+      });
       return res.status(201).json(newPokemon);
     }
   } catch (error) {
