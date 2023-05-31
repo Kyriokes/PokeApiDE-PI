@@ -20,11 +20,40 @@ function pokeData(poke) {
   };
 }
 
+function typeFilter(obj){ 
+  let array = [];
+  for (const typeName of obj.types) {
+    let nueva = typeName.name;
+    array.push(nueva);
+  };
+  return array;
+}
+function pokeTypeFromObjToStr(poke){
+  return {
+    id: poke.id,
+    name: poke.name,
+    image: poke.sprites,
+    height: poke.height,
+    weight: poke.weight,
+    hp: poke.hp,
+    attack: poke.attack,
+    defense: poke.defense,
+    speed: poke.speed,
+    types: typeFilter(poke)
+  };
+};
+
 const getPokemons = async () => {
   //trae de la base de datos
-  const dbPokemons = await Pokemon.findAll();
+  const dbPokemonsNofilter = await Pokemon.findAll({ include: [{ model: Type , attributes:["name"] }]}); //include estaria agregando los datos de la relacion
+  
+  const dbPokemons = [];
+  for (const pokemon of dbPokemonsNofilter) {
+    dbPokemons.push(pokeTypeFromObjToStr(pokemon))
+  }
+
   //trae de la api
-  const apiPokemons = (await axios.get("https://pokeapi.co/api/v2/pokemon"))
+  const apiPokemons = (await axios.get("https://pokeapi.co/api/v2/pokemon?limit=1281"))  
     .data.results;
   const apiPokemonsUrl = await Promise.all(
     apiPokemons.map(async (element) => {
@@ -47,6 +76,8 @@ const getPokemonsByName = async (PokeName) => {
     return pokeData(PokemonByName);
   }
 };
+
+
 const getPokemonId = async (PokeId) => {
   let PokemonByID = 0;
   if (PokeId.length < 6) {
@@ -83,7 +114,13 @@ const createPokemon = async ({
     weight,
     types,
   };
-  const newPokemon = await Pokemon.create(objPokemon);
+  let allTypes = [];
+  for (const typeName of types) { //recorro el arreglo que llega por el post
+    const newType = await Type.findOne({where:{name: typeName}}) //busco los valores de dicho arreglo en el modelo
+    allTypes.push(newType) //los almaceno en un arreglo
+  }
+  const newPokemon = await Pokemon.create(objPokemon); // crea el nuevo pokemon
+  await newPokemon.addTypes(allTypes); // asigna los tipos al nuevo pokemon
   return newPokemon;
 };
 

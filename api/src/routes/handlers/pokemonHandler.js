@@ -35,7 +35,8 @@ const getPokemonIdHandler = async (req, res) => {
   try {
     // pido a la db o a la api si id.length<5 el pokemon por id
     const pokemonId = await getPokemonId(id);
-    if (pokemonId.length === 0) { // reviso q sea un id valido
+    if (pokemonId.length === 0) {
+      // reviso q sea un id valido
       return res.send("No puede ser 0");
     } else {
       return res.json(pokemonId);
@@ -48,13 +49,29 @@ const getPokemonIdHandler = async (req, res) => {
 //-------  POST | /pokemons
 const createPokemonHandler = async (req, res) => {
   const { name, sprites, hp, attack, defense, speed, height, weight, types } =
-    req.body;  
+    req.body;
   try {
-    if(!name|| !sprites|| !hp|| !attack|| !defense|| !speed|| !height|| !weight || !types){ // me aseguro que los datos existan
-      throw Error ("missing data");
+    if (
+      !name ||
+      !sprites ||
+      !hp ||
+      !attack ||
+      !defense ||
+      !speed ||
+      !height ||
+      !weight ||
+      !types
+    ) {
+      // me aseguro que los datos existan
+      throw Error("missing data");
     }
-    let typeDB = await Type.findOne({ where: { name: types } });
-    if(typeDB){
+
+    let poketTypes = [];
+    for (const typeName of types) {
+      let typeDB = await Type.findOne({ where: { name: typeName } });
+      poketTypes.push(typeDB);
+    }
+    if (poketTypes.length) {
       const newPokemon = await createPokemon({
         name,
         sprites,
@@ -62,14 +79,15 @@ const createPokemonHandler = async (req, res) => {
         attack,
         defense,
         speed,
-        height,
+        height, 
         weight,
-        types:typeDB.name
+        types: poketTypes.map(type => type.name),
       });
       return res.status(201).json(newPokemon);
-    }
-    else{
-      const newType = await Type.create({name:types})
+    } else {
+      for (const typeName of types) {
+        const newType = await Type.create({ name: typeName });
+      }
       const newPokemon = await createPokemon({
         name,
         sprites,
@@ -79,7 +97,7 @@ const createPokemonHandler = async (req, res) => {
         speed,
         height,
         weight,
-        types:newType.name
+        types: newType.name,
       });
       return res.status(201).json(newPokemon);
     }
@@ -88,7 +106,6 @@ const createPokemonHandler = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 };
-
 
 module.exports = {
   getPokemonHandler,
