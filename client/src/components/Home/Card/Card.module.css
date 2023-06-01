@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 5px 0px;
+    width: 20vw;
+    height: 12vw;
+  }
+  h1 {
+    text-align: center;
+  }
+  p{
+    margin: 0px
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    width: 100%;
+  }  
+  .stats > div {
+    flex: 1;
+  }
