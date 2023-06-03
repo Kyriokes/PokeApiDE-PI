@@ -1,9 +1,18 @@
-.container{
+.container {
     display: flex;
-    border: 1px solid black;
     flex-direction: row;
+    border: 1px solid black;
     border-radius: 5px;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
-}
+    background-color: #918c8c; /* Light gray background */
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container:hover {
+    background-color: #535252; /* Lighter gray background on hover */
+  }
+  
+  

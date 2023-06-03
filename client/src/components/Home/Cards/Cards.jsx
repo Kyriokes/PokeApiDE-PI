@@ -2,13 +2,15 @@ import Card from "../Card/Card";
 import style from "./Cards.module.css";
 import { useSelector } from "react-redux";
 
-function Cards() {
+const Cards = () => {
   const pokemons = useSelector((state) => state.pokemons);
+
   return (
     <div className={style.container}>
       {pokemons.map((poke) => {
         return (
           <Card
+            key={poke.id}
             id={poke.id}
             name={poke.name}
             image={poke.image}
@@ -24,6 +26,6 @@ function Cards() {
       })}
     </div>
   );
-}
+};
 
 export default Cards;

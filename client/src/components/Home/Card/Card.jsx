@@ -1,17 +1,23 @@
 import style from "./Card.module.css"
 
-function Card(poke) {
+function Card({ id, name, height, weight, hp, attack, defense, speed, types, image }) {
     return ( 
     <div className={style.container}>
-        <h1>{poke.name}</h1>
+        <h1>{name}</h1>
+        <img src={image} alt={name} className={style.image} />
         <div className={style.stats}>
-        <p>height={poke.height}</p>
-        <p>weight={poke.weight}</p>
-        <p>hp={poke.hp}</p>
-        <p>attack={poke.attack}</p>
-        <p>defense={poke.defense}</p>
-        <p>speed={poke.speed}</p>
-        <p>types={poke.types}</p>
+        <p>id={id}</p>
+        <p>height={height}</p>
+        <p>weight={weight}</p>
+        <p>hp={hp}</p>
+        <p>attack={attack}</p>
+        <p>defense={defense}</p>
+        <p>speed={speed}</p>
+        <div className={style.type}>
+          {types.map((type, index) => (
+            <span key={index} className={style[type]}>{type}</span>
+          ))}
+        </div>
         </div>
     </div>
      );
