@@ -17,7 +17,7 @@ export const getPokemons = () => {
 
 export const getPokemonDetail = (id) => {
   return async (dispatch) => {
-    const response = await axios.get(`http://localhost:3001/pokemons/${id}`);
+    const response = await axios.get(`http://localhost:3001/pokemon/${id}`);
     const pokemon = response.data;
     dispatch({ type: GET_POKEMON_DETAIL, payload: pokemon });
   };
@@ -25,7 +25,7 @@ export const getPokemonDetail = (id) => {
 
 export const searchPokemon = (name) => {
   return async (dispatch) => {
-    const response = await axios(`http://localhost:3001/pokemons?name=${name}`);
+    const response = await axios(`http://localhost:3001/pokemon?name=${name}`);
     const pokemon = response.data;
     dispatch({ type: SEARCH_POKEMON, payload: pokemon });
   };
@@ -41,7 +41,7 @@ export const getTypes = () => {
 
 export const createPokemon = (form) => {
   return async (dispatch) => {
-    const response = await axios.post("http://localhost:3001/pokemons", form);
+    const response = await axios.post("http://localhost:3001/pokemon", form);
     const newPokemon = response.data;
     dispatch({ type: POST_POKEMON, payload: newPokemon });
   };

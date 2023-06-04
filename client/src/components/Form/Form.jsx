@@ -1,9 +1,9 @@
-import Style from "./Form.module.css";
+import style from "./Form.module.css";
 
 
 function Form() {
   return (
-    <div>
+    <div className={style.container}>
       <h1>Form</h1>
     </div>
   );

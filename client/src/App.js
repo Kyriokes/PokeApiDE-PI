@@ -13,9 +13,9 @@ function App() {
       <h1>Henry Pokemon</h1>
       {location.pathname !== "/" && <Nav/>}
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/home/" element={<Home />} />
 
-        <Route path="/detail" element={<Detail />} />
+        <Route path="/detail/:id" element={<Detail />} />
 
         <Route path="/form" element={<Form />} />
 

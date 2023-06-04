@@ -5,8 +5,10 @@ function pokeData(poke) {
   //para crear los objetos con la info de los pokemons
   return {
     id: poke.data.id,
-    name: poke.data.name,
-    image: poke.data.sprites.front_default,
+    name:  poke.data.name.charAt(0).toUpperCase() + poke.data.name.slice(1),
+    // poke.data.name,
+    image: poke.data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'] || poke.data.sprites.front_default,
+    // image: poke.data.sprites.front_default,
     height: poke.data.height,
     weight: poke.data.weight,
     hp: poke.data.stats.find((element) => element.stat.name === "hp").base_stat,
@@ -33,7 +35,7 @@ function pokeTypeFromObjToStr(poke) {
   //para filtrar la info de los poke de la db
   return {
     id: poke.id,
-    name: poke.name,
+    name: poke.name.charAt(0).toUpperCase() + poke.name.slice(1),
     image: poke.sprites,
     height: poke.height,
     weight: poke.weight,
@@ -58,7 +60,7 @@ const getPokemons = async () => {
 
   //trae de la api
   const apiPokemons = (
-    await axios.get("https://pokeapi.co/api/v2/pokemon?limit=251")
+    await axios.get("https://pokeapi.co/api/v2/pokemon?limit=151")
   ).data.results;
   const apiPokemonsUrl = await Promise.all(
     apiPokemons.map(async (element) => {
