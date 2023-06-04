@@ -1,5 +1,5 @@
 import Cards from "./Cards/Cards";
-import Style from "./Home.module.css";
+import style from "./Home.module.css";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getPokemons } from "../../redux/action";
@@ -13,8 +13,8 @@ const dispatch = useDispatch();
   }, [dispatch]);
 
   return (
-    <div className={Style.container}>
-      <h1 className={Style.home}>Home</h1>
+    <div className={style.container}>
+      <h1 className={style.home}>Home</h1>
       <Cards></Cards>
     </div>
   );
