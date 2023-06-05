@@ -10,6 +10,10 @@
   width: 50vw; 
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   background-image: linear-gradient(to bottom left, #ff0000, #f1c40f);
+  min-height: 100vh;
+}
+.algo{
+  height: 50%;
 }
 
 .name {

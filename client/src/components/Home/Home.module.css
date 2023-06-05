@@ -9,6 +9,7 @@
   background-color: #343458;
   padding: 20px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
 }
 
 .container:hover {
