@@ -5,7 +5,10 @@ import {
   SEARCH_POKEMON,
   GET_TYPES,
   POST_POKEMON,
+  FILTERED_BY_TYPES,
 } from "./action-type";
+import store from "./store";
+
 
 export const getPokemons = () => {
   return async function (dispatch) {
@@ -33,7 +36,7 @@ export const searchPokemon = (name) => {
 
 export const getTypes = () => {
   return async (dispatch) => {
-    const response = await axios(`http://localhost:3001/types`);
+    const response = await axios(`http://localhost:3001/type`);
     const types = response.data;
     dispatch({ type: GET_TYPES, payload: types });
   };
@@ -46,3 +49,9 @@ export const createPokemon = (form) => {
     dispatch({ type: POST_POKEMON, payload: newPokemon });
   };
 };
+
+export const typeFilter = (value) =>{
+  const tFPokemons = store.getState().Pokemons
+  tFPokemons.filter(pokemon => pokemon.types.some(element => element === value))
+  return {type: FILTERED_BY_TYPES , payload: tFPokemons}
+}

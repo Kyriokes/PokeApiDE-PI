@@ -4,6 +4,7 @@ import {
   SEARCH_POKEMON,
   GET_TYPES,
   POST_POKEMON,
+  FILTERED_BY_TYPES
 } from "./action-type";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   allPokemons: [],
   detail: {},
   types: [],
+  fPokemonsByTypes: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -24,7 +26,9 @@ const rootReducer = (state = initialState, action) => {
     case GET_TYPES:
       return { ...state, types: action.payload };
     case POST_POKEMON:
-      return { ...state };
+      return { ...state, pokemons: action.payload };
+    case FILTERED_BY_TYPES:
+      return { ...state, fPokemonsByTypes: action.payload };
     default:
       return { ...state };
   }

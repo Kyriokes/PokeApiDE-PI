@@ -1,40 +1,80 @@
 import style from "./Form.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import validate from "./Validate";
+import axios from "axios";
+import { getTypes, createPokemon } from "../../redux/action";
 
-function Form(props) {
-  const {} = props;
+function Form() {
+  const types = useSelector((state) => state.types);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTypes());
+  }, [dispatch]);
 
   const [form, setForm] = useState({
-    name: "",
-    hp: "",
-    attack: "",
-    defense: "",
-    speed: "",
-    weight: "",
-    height: "",
-    img: "",
-    types: [],
+    name:"",
+    image:"",
+    hp:"",
+    attack:"",
+    defense:"",
+    speed:"",
+    height:"",
+    weight:"",
+    types:[],
   });
 
   const [errors, setErrors] = useState({});
 
   const changeHandler = (event) => {
-    // const property = event.target.name;
-    // const value = event.target.value;
-    // setForm({ ...form, [property]: value });
-    // validate(form)
     setForm({
       ...form,
       [event.target.name]: event.target.value,
     });
-    setErrors(validate(form));
+    setErrors(
+      validate({
+        ...form,
+        [event.target.name]: event.target.value,
+      })
+    );
+  };
+
+  const selectHandler = (event) => {
+    setForm({
+      ...form,
+      types: [...form.types, Number(event.target.value)],
+    });
+  };
+
+
+
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    const NewPoke = {
+      name: form.name,
+      image: form.image,
+      hp: Number(form.hp),
+      attack: Number(form.attack),
+      defense: Number(form.defense),
+      speed: Number(form.speed),
+      height: Number(form.height),
+      weight: Number(form.weight),
+      types: form.types,
+  }
+    alert(`A Wild ${form.name} has Appeared`);
+    dispatch(createPokemon(NewPoke))
+    // await axios
+    //   .post("http://localhost:3001/pokemon", form)
+    //   .then((res) => alert(res))
+    //   .catch((err) => alert(err));
   };
 
   return (
     <div className={style.container}>
       <h1>Form</h1>
-      <form>
+      <form onSubmit={submitHandler}>
         <div>
           <label>name: </label>
           <input
@@ -116,15 +156,26 @@ function Form(props) {
         </div>
         {errors.img && <p>{errors.img}</p>}
         <div>
-          <label>types: </label>
-          <input
-            type="text"
-            value={form.types}
-            onChange={changeHandler}
-            name="types"
-          />
+          <label>type 1: </label>
+          <select onChange={(select) => selectHandler(select)}>
+            {types.map((type) => (
+              <option value={type.id} key={type.name}>
+                {type.name}
+              </option>
+            ))}
+          </select>
         </div>
-        {errors.types && <p>{errors.types}</p>}
+        {/* <div>
+          <label>type 2: </label>
+          <select onChange={(select) => selectHandler(select)}>
+            {types.map((type) => (
+              <option value={type.id} key={type.name}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        </div> */}
+        <button type="submit">SUBMIT</button>
       </form>
     </div>
   );
