@@ -7,10 +7,8 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getTypes } from "../../../redux/action";
 
-
 const Cards = () => {
   const types = useSelector((state) => state.types);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -18,12 +16,10 @@ const Cards = () => {
   }, [dispatch]);
 
   const pokemons = useSelector((state) => state.pokemons);
-  const [pokemonType, setPokemonType] = useState("");
+  const [pokemonType, setPokemonType] = useState("ALL");
   const [selectedType, setSelectedType] = useState("");
 
-  const { thisPage, totalPages, itemsPerPage } = useSelector(
-    (state) => state.pagination
-  );
+  const { thisPage, itemsPerPage } = useSelector((state) => state.pagination);
 
   const { pathname } = useLocation();
 
@@ -47,6 +43,7 @@ const Cards = () => {
     : pokeCopy;
 
   const thisPagePokemons = filteredPokemons.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredPokemons.length / itemsPerPage);
 
   const handlePageChange = (page) => {
     dispatch(setPage(page));
@@ -62,7 +59,8 @@ const Cards = () => {
   };
 
   const handleChangeType = (event) => {
-    setSelectedType(event.target.value);
+    const selectedType = event.target.value;
+    setSelectedType(selectedType === "ALL" ? "" : selectedType);
   };
 
   return (
@@ -90,6 +88,7 @@ const Cards = () => {
           value={selectedType}
           onChange={handleChangeType}
         >
+          <option value="">All Types</option>
           {types.map((type) => (
             <option value={type.name} key={type.name}>
               {type.name}
@@ -119,6 +118,7 @@ const Cards = () => {
       ) : (
         <div />
       )}
+
       {!pathname.includes("detail") && (
         <div className={style.pagination}>
           <Pagination
