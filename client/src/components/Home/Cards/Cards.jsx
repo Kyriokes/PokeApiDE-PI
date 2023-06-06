@@ -4,15 +4,23 @@ import { useSelector, useDispatch } from "react-redux";
 import Pagination from "../../Pagination/Pagination";
 import { setPage, setOrder } from "../../../redux/action";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getTypes } from "../../../redux/action";
+
 
 const Cards = () => {
   const types = useSelector((state) => state.types);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTypes());
+  }, [dispatch]);
+
   const pokemons = useSelector((state) => state.pokemons);
   const [pokemonType, setPokemonType] = useState("");
   const [selectedType, setSelectedType] = useState("");
 
-  const dispatch = useDispatch();
   const { thisPage, totalPages, itemsPerPage } = useSelector(
     (state) => state.pagination
   );
@@ -76,18 +84,19 @@ const Cards = () => {
         <option value="DB">User created</option>
       </select>
 
-      <select
-        className={style.filter}
-        value={selectedType}
-        onChange={handleChangeType}
-      >
-        <option value="">All Types</option>
-        {types?.map((type) => (
-          <option value={type.name} key={type.name}>
-            {type.name}
-          </option>
-        ))}
-      </select>
+      {types && types.length > 0 && (
+        <select
+          className={style.filter}
+          value={selectedType}
+          onChange={handleChangeType}
+        >
+          {types.map((type) => (
+            <option value={type.name} key={type.name}>
+              {type.name}
+            </option>
+          ))}
+        </select>
+      )}
 
       {thisPagePokemons && thisPagePokemons.length > 0 ? (
         thisPagePokemons.map((poke) => {

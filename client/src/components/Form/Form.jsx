@@ -6,6 +6,7 @@ import { getTypes, createPokemon } from "../../redux/action";
 
 function Form() {
   const types = useSelector((state) => state.types);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
