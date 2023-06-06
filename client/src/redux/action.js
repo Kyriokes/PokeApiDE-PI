@@ -9,8 +9,10 @@ import {
   SET_ITEMS_PER_PAGE,
   SET_PAGE,
   SET_TOTAL_PAGES,
+  SET_ORDER,
+  SET_FILTER,
 } from "./action-type";
-import store from "./store";
+
 
 
 export const getPokemons = () => {
@@ -57,11 +59,15 @@ export const createPokemon = (form) => {
   };
 };
 
-export const typeFilter = (value) =>{
-  const tFPokemons = store.getState().Pokemons
-  tFPokemons.filter(pokemon => pokemon.types.some(element => element === value))
-  return {type: FILTERED_BY_TYPES , payload: tFPokemons}
-}
+export const typeFilter = (value) => {
+  return (dispatch, getState) => {
+    const { pokemons } = getState();
+    const filteredPokemons = pokemons.filter(pokemon =>
+      pokemon.types.includes(value)
+    );
+    dispatch({ type: FILTERED_BY_TYPES, payload: filteredPokemons });
+  };
+};
 
 export const setPage = (page) => ({
   type: SET_PAGE,
@@ -72,4 +78,19 @@ export const setItemsPerPage = (itemsPerPage) => ({
   type: SET_ITEMS_PER_PAGE,
   payload: itemsPerPage,
 });
+
+export const setOrder = (order) => {
+  return {
+    type: SET_ORDER,
+    payload: order,
+  };
+};
+
+export const setFilter = (filter) => {
+  return {
+    type: SET_FILTER,
+    payload: filter,
+  };
+};
+
 

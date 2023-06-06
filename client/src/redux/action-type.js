@@ -7,4 +7,5 @@ export const FILTERED_BY_TYPES = "FILTERED_BY_TYPES";
 export const SET_ITEMS_PER_PAGE = "SET_ITEMS_PER_PAGE";
 export const SET_PAGE = "SET_PAGE";
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
-
+export const SET_ORDER = 'SET_ORDER';
+export const SET_FILTER = 'SET_FILTER';

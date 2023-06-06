@@ -14,3 +14,11 @@
 .container:hover {
     background-color: #2a2a4c;
 }
+
+.order{
+    display: flex;
+}
+
+.filter{
+    display: flex;
+}

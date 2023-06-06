@@ -2,7 +2,6 @@ import style from "./Form.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import validate from "./Validate";
-import axios from "axios";
 import { getTypes, createPokemon } from "../../redux/action";
 
 function Form() {
@@ -61,7 +60,7 @@ function Form() {
   const submitHandler = (event) => {
     event.preventDefault();
     const NewPoke = { 
-      name: form.name,
+      name: form.name.toLowerCase(),
       sprites: form.image,
       hp: Number(form.hp),
       attack: Number(form.attack),
@@ -76,10 +75,6 @@ function Form() {
 
     alert(`A Wild ${form.name} has Appeared`);
     dispatch(createPokemon(NewPoke))
-    // await axios
-    //   .post("http://localhost:3001/pokemon", NewPoke)
-    //   .then((res) => alert(res))
-    //   .catch((err) => alert(err));
 
     console.log(`form abajo: ${form}`);
     console.log(`NewPoke abajo: ${NewPoke}`);

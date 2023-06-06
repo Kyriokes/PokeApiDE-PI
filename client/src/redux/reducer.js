@@ -8,13 +8,17 @@ import {
   SET_ITEMS_PER_PAGE,
   SET_PAGE,
   SET_TOTAL_PAGES,
+  SET_ORDER,
+  SET_FILTER,
 } from "./action-type";
 
 const initialState = {
   pokemons: [],
   detail: {},
   types: [],
-  pokemon:{},
+  pokemon: {},
+  order: "",
+  filter: "",
   fPokemonsByTypes: [],
   pagination: {
     thisPage: 1,
@@ -53,6 +57,17 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         pagination: { ...state.pagination, totalPages: action.payload },
+      };
+    case SET_ORDER:
+      return {
+        ...state,
+        order: action.payload,
+      };
+
+    case SET_FILTER:
+      return {
+        ...state,
+        filter: action.payload,
       };
     default:
       return { ...state };

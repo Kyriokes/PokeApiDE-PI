@@ -17,7 +17,6 @@ const Pagination = ({ thisPage, totalPages, pageChange }) => {
     pageChange(page);
   };
 
-  const displayedPages = [];
   const visiblePageCount = 9;
 
   const startPage = Math.max(1, thisPage - Math.floor(visiblePageCount / 2));
