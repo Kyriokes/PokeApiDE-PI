@@ -44,7 +44,7 @@ export default function validate(form){
     }
 
     // image
-    const urlRegex = /(http(s?):)([/|.|\w|\s|-])*.(?:gif|png)/;
+    const urlRegex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/;
     if (!urlRegex.test(form.img)) {
       error.img = "Invalid URL";
     }

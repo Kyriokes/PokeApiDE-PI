@@ -14,16 +14,18 @@ function Form() {
   }, [dispatch]);
 
   const [form, setForm] = useState({
-    name:"",
-    image:"",
-    hp:"",
-    attack:"",
-    defense:"",
-    speed:"",
-    height:"",
-    weight:"",
-    types:[],
+    name: "",
+    image: "",
+    hp: "",
+    attack: "",
+    defense: "",
+    speed: "",
+    height: "",
+    weight: "",
+    types: [],
   });
+
+  console.log(`form arriba: ${form.types}`);
 
   const [errors, setErrors] = useState({});
 
@@ -41,20 +43,26 @@ function Form() {
   };
 
   const selectHandler = (event) => {
+    let name = [];
+    console.log(`el array:   ${event.target.value}`);
+    if (event.target.name === "type 1") {
+      name.push(event.target.value);
+    }
+    if (event.target.name === "type 2") {
+      name.push(event.target.value);
+    }
     setForm({
       ...form,
-      types: [...form.types, Number(event.target.value)],
+      types: [...form.types, ...name],
     });
+    console.log(`form abajo: ${form}`);
   };
 
-
-
-
-  const submitHandler = async (event) => {
+  const submitHandler = (event) => {
     event.preventDefault();
-    const NewPoke = {
+    const NewPoke = { 
       name: form.name,
-      image: form.image,
+      sprites: form.image,
       hp: Number(form.hp),
       attack: Number(form.attack),
       defense: Number(form.defense),
@@ -62,13 +70,19 @@ function Form() {
       height: Number(form.height),
       weight: Number(form.weight),
       types: form.types,
-  }
+    };
+    console.log("form abajo:", JSON.stringify(form));
+    console.log("NewPoke abajo:", JSON.stringify(NewPoke));
+
     alert(`A Wild ${form.name} has Appeared`);
     dispatch(createPokemon(NewPoke))
     // await axios
-    //   .post("http://localhost:3001/pokemon", form)
+    //   .post("http://localhost:3001/pokemon", NewPoke)
     //   .then((res) => alert(res))
     //   .catch((err) => alert(err));
+
+    console.log(`form abajo: ${form}`);
+    console.log(`NewPoke abajo: ${NewPoke}`);
   };
 
   return (
@@ -146,35 +160,59 @@ function Form() {
         </div>
         {errors.height && <p>{errors.height}</p>}
         <div>
-          <label>img: </label>
+          <label>image: </label>
           <input
             type="text"
-            value={form.img}
+            value={form.image}
             onChange={changeHandler}
-            name="img"
+            name="image"
           />
         </div>
-        {errors.img && <p>{errors.img}</p>}
-        <div>
+        {errors.image && <p>{errors.image}</p>}
+
+
+
+        <div className={style.typeOne}>
           <label>type 1: </label>
-          <select onChange={(select) => selectHandler(select)}>
-            {types.map((type) => (
-              <option value={type.id} key={type.name}>
+          <select name="type 1" onChange={(select) => selectHandler(select)}>
+            {types?.map((type) => (
+              <option value={type.name} key={type.name}>
                 {type.name}
               </option>
             ))}
           </select>
-        </div>
-        {/* <div>
-          <label>type 2: </label>
-          <select onChange={(select) => selectHandler(select)}>
-            {types.map((type) => (
-              <option value={type.id} key={type.name}>
+          </div>
+
+
+
+          {/* <div className={style.typeTwo}>
+          <label>type 1: </label>
+          <select name="type 2" onChange={(select) => selectHandler(select)}>
+            {types?.map((type) => (
+              <option value={type.name} key={type.name}>
                 {type.name}
               </option>
             ))}
           </select>
-        </div> */}
+          </div> */}
+
+
+
+        {form.types.length > 0 ? (
+          <div className={style.typeTwo}>
+            <label>type 2: </label>
+            <select name="type 2" onChange={(select) => selectHandler(select)}>
+              {types.map((type) => (
+                <option value={type.name} key={type.name}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div></div>
+        )}
+
         <button type="submit">SUBMIT</button>
       </form>
     </div>
