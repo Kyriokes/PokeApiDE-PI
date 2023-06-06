@@ -12,9 +12,9 @@ import {
 
 const initialState = {
   pokemons: [],
-  allPokemons: [],
   detail: {},
   types: [],
+  pokemon:{},
   fPokemonsByTypes: [],
   pagination: {
     thisPage: 1,
@@ -32,7 +32,7 @@ const rootReducer = (state = initialState, action) => {
     case GET_POKEMON_DETAIL:
       return { ...state, detail: action.payload };
     case SEARCH_POKEMON:
-      return { ...state, pokemons: action.payload };
+      return { ...state, pokemon: action.payload };
     case GET_TYPES:
       return { ...state, types: action.payload };
     case POST_POKEMON:

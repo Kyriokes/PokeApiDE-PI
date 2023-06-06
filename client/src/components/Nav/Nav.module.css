@@ -3,12 +3,22 @@
     flex-direction:row;
     align-content: flex-start;
     margin: 5px ;
+
 }  
 .link{
     text-align: center;
-    margin-top: 2px;
+    margin: 4px;
+    padding: 2px;
     font-size: 1.5rem;
     text-decoration: none;
     color: #f1c40f;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0px 0px 4px white;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.link:hover {
+    color: #ff0000; 
+    text-shadow: none;
+    background-color: #343458;
 }

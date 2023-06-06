@@ -17,14 +17,11 @@ export const getPokemons = () => {
   return async function (dispatch, getState) {
     const apiPokemon = await axios.get("http://localhost:3001/pokemon/");
     const pokemon = apiPokemon.data;
-
-
     dispatch({ type: GET_POKEMONS, payload: pokemon });
     const totalItems = pokemon.length;
     const itemsPerPage = getState().pagination.itemsPerPage;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     dispatch({ type: SET_TOTAL_PAGES, payload: totalPages });
-
   };
 };
 
