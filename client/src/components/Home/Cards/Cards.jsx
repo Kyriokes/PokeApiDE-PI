@@ -1,32 +1,35 @@
-import Card from "../Card/Card";
-import style from "./Cards.module.css";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Pagination from "../../Pagination/Pagination";
-import { setPage, setOrder } from "../../../redux/action";
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import Card from "../Card/Card";
+import Pagination from "../../Pagination/Pagination";
+import { setPage } from "../../../redux/action";
 import { getTypes } from "../../../redux/action";
+import style from "./Cards.module.css";
 
 const Cards = () => {
   const types = useSelector((state) => state.types);
+  const pokemons = useSelector((state) => state.pokemons);
+  const pagination = useSelector((state) => state.pagination);
+  
+  const [selectedType, setSelectedType] = useState("");
+  const [pokemonType, setPokemonType] = useState("");
+  const [order, setOrder] = useState("");
+  
   const dispatch = useDispatch();
-
+  const { thisPage, totalPages, itemsPerPage } = pagination;
+  
+  const { pathname } = useLocation();
+  
   useEffect(() => {
     dispatch(getTypes());
   }, [dispatch]);
 
-  const pokemons = useSelector((state) => state.pokemons);
-  const [pokemonType, setPokemonType] = useState("ALL");
-  const [selectedType, setSelectedType] = useState("");
-
-  const { thisPage, itemsPerPage } = useSelector((state) => state.pagination);
-
-  const { pathname } = useLocation();
-
   const startIndex = (thisPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  let pokeCopy = pokemons ? [...pokemons] : [];
 
+  let pokeCopy = pokemons ? [...pokemons] : [];
+  
   switch (pokemonType) {
     case "API":
       pokeCopy = pokeCopy.filter((poke) => typeof poke.id === "number");
@@ -37,32 +40,62 @@ const Cards = () => {
     default:
       break;
   }
-
+  
   const filteredPokemons = selectedType
     ? pokeCopy.filter((poke) => poke.types.includes(selectedType))
     : pokeCopy;
-
-  const thisPagePokemons = filteredPokemons.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(filteredPokemons.length / itemsPerPage);
-
+  
+  const orderedPokemons = filteredPokemons.slice().sort((a, b) => {
+    switch (order) {
+      case "asc":
+        return a.name.localeCompare(b.name);
+      case "desc":
+        return b.name.localeCompare(a.name);
+      case "maxAttack":
+        return b.attack - a.attack;
+      case "minAttack":
+        return a.attack - b.attack;
+      default:
+        return 0;
+    }
+  });
+  
+  const thisPagePokemons = orderedPokemons.slice(startIndex, endIndex);
+  
   const handlePageChange = (page) => {
     dispatch(setPage(page));
   };
-
-  const handleOrderChange = (event) => {
-    const selectedOrder = event.target.value;
-    dispatch(setOrder(selectedOrder));
-  };
-
+  
   const handleChange = (event) => {
     setPokemonType(event.target.value);
   };
-
+  
   const handleChangeType = (event) => {
-    const selectedType = event.target.value;
-    setSelectedType(selectedType === "ALL" ? "" : selectedType);
+    setSelectedType(event.target.value);
   };
-
+  
+  const handleOrderChange = (event) => {
+    const selectedOrder = event.target.value;
+  
+    switch (selectedOrder) {
+      case "A":
+        setOrder("asc");
+        break;
+      case "Z":
+        setOrder("desc");
+        break;
+      case "MAX":
+        setOrder("maxAttack");
+        break;
+      case "MIN":
+        setOrder("minAttack");
+        break;
+      default:
+        setOrder("");
+        break;
+    }
+  };
+  
   return (
     <div className={style.container}>
       <select className={style.order} onChange={handleOrderChange}>
@@ -71,23 +104,15 @@ const Cards = () => {
         <option value="MAX">Max to Min Attack</option>
         <option value="MIN">Min to Max Attack</option>
       </select>
-
-      <select
-        className={style.filter}
-        value={pokemonType}
-        onChange={handleChange}
-      >
+  
+      <select className={style.filter} value={pokemonType} onChange={handleChange}>
         <option value="ALL">All</option>
         <option value="API">Vanilla</option>
         <option value="DB">User created</option>
       </select>
-
+  
       {types && types.length > 0 && (
-        <select
-          className={style.filter}
-          value={selectedType}
-          onChange={handleChangeType}
-        >
+        <select className={style.filter} value={selectedType} onChange={handleChangeType}>
           <option value="">All Types</option>
           {types.map((type) => (
             <option value={type.name} key={type.name}>
@@ -96,7 +121,7 @@ const Cards = () => {
           ))}
         </select>
       )}
-
+  
       {thisPagePokemons && thisPagePokemons.length > 0 ? (
         thisPagePokemons.map((poke) => {
           return (
@@ -116,9 +141,8 @@ const Cards = () => {
           );
         })
       ) : (
-        <div />
+        <div>No pokemons found.</div>
       )}
-
       {!pathname.includes("detail") && (
         <div className={style.pagination}>
           <Pagination
