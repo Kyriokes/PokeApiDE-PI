@@ -4,7 +4,10 @@ import {
   SEARCH_POKEMON,
   GET_TYPES,
   POST_POKEMON,
-  FILTERED_BY_TYPES
+  FILTERED_BY_TYPES,
+  SET_ITEMS_PER_PAGE,
+  SET_PAGE,
+  SET_TOTAL_PAGES,
 } from "./action-type";
 
 const initialState = {
@@ -13,6 +16,13 @@ const initialState = {
   detail: {},
   types: [],
   fPokemonsByTypes: [],
+  pagination: {
+    thisPage: 1,
+    totalPages: 0,
+    totalItems: 0,
+    itemsPerPage: 12,
+    currentPageItems: [],
+  },
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -29,6 +39,21 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, pokemons: action.payload };
     case FILTERED_BY_TYPES:
       return { ...state, fPokemonsByTypes: action.payload };
+    case SET_PAGE:
+      return {
+        ...state,
+        pagination: { ...state.pagination, thisPage: action.payload },
+      };
+    case SET_ITEMS_PER_PAGE:
+      return {
+        ...state,
+        pagination: { ...state.pagination, itemsPerPage: action.payload },
+      };
+    case SET_TOTAL_PAGES:
+      return {
+        ...state,
+        pagination: { ...state.pagination, totalPages: action.payload },
+      };
     default:
       return { ...state };
   }

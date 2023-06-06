@@ -6,15 +6,25 @@ import {
   GET_TYPES,
   POST_POKEMON,
   FILTERED_BY_TYPES,
+  SET_ITEMS_PER_PAGE,
+  SET_PAGE,
+  SET_TOTAL_PAGES,
 } from "./action-type";
 import store from "./store";
 
 
 export const getPokemons = () => {
-  return async function (dispatch) {
+  return async function (dispatch, getState) {
     const apiPokemon = await axios.get("http://localhost:3001/pokemon/");
     const pokemon = apiPokemon.data;
+
+
     dispatch({ type: GET_POKEMONS, payload: pokemon });
+    const totalItems = pokemon.length;
+    const itemsPerPage = getState().pagination.itemsPerPage;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    dispatch({ type: SET_TOTAL_PAGES, payload: totalPages });
+
   };
 };
 
@@ -55,3 +65,14 @@ export const typeFilter = (value) =>{
   tFPokemons.filter(pokemon => pokemon.types.some(element => element === value))
   return {type: FILTERED_BY_TYPES , payload: tFPokemons}
 }
+
+export const setPage = (page) => ({
+  type: SET_PAGE,
+  payload: page,
+});
+
+export const setItemsPerPage = (itemsPerPage) => ({
+  type: SET_ITEMS_PER_PAGE,
+  payload: itemsPerPage,
+});
+

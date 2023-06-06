@@ -1,14 +1,33 @@
 import Card from "../Card/Card";
 import style from "./Cards.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Pagination from "../../Pagination/Pagination";
+import { setPage } from "../../../redux/action";
+import { useLocation } from 'react-router-dom';
 
 const Cards = () => {
   const pokemons = useSelector((state) => state.pokemons);
 
+  const dispatch = useDispatch();
+  const { thisPage, totalPages, itemsPerPage } = useSelector(
+  (state) => state.pagination);
+  
+  const { pathname } = useLocation();
+
+  const startIndex = (thisPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const thisPagePokemons = pokemons.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    dispatch(setPage(page));
+  }
+
   return (
     <div className={style.container}>
-      {pokemons && pokemons.length > 0 ? (
-        pokemons?.map((poke) => {
+
+
+      {thisPagePokemons && thisPagePokemons.length > 0 ? (
+        thisPagePokemons?.map((poke) => {
           return (
             <Card
               key={poke.id}
@@ -28,8 +47,20 @@ const Cards = () => {
       ) : (
         <div />
       )}
+            { !pathname.includes('detail') &&
+                <div className={ style.pagination }>
+                    <Pagination
+                        thisPage={thisPage}
+                        totalPages={totalPages}
+                        pageChange={handlePageChange}
+                    />
+                </div>
+            }
+
     </div>
   );
+
+
 };
 
 export default Cards;
