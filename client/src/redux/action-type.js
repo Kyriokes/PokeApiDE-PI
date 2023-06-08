@@ -1,11 +1,7 @@
 export const GET_POKEMONS = "GET_POKEMONS";
 export const GET_POKEMON_DETAIL = "GET_POKEMON_DETAIL";
-export const SEARCH_POKEMON = "SEARCH_POKEMON";
 export const GET_TYPES = "GET_TYPES";
 export const POST_POKEMON = "POST_POKEMON";
-export const FILTERED_BY_TYPES = "FILTERED_BY_TYPES";
-export const SET_ITEMS_PER_PAGE = "SET_ITEMS_PER_PAGE";
 export const SET_PAGE = "SET_PAGE";
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
-export const SET_ORDER = 'SET_ORDER';
-export const SET_FILTER = 'SET_FILTER';
+

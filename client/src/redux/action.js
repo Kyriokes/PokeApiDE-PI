@@ -2,15 +2,10 @@ import axios from "axios";
 import {
   GET_POKEMONS,
   GET_POKEMON_DETAIL,
-  SEARCH_POKEMON,
   GET_TYPES,
   POST_POKEMON,
-  FILTERED_BY_TYPES,
-  SET_ITEMS_PER_PAGE,
   SET_PAGE,
   SET_TOTAL_PAGES,
-  SET_ORDER,
-  SET_FILTER,
 } from "./action-type";
 
 
@@ -35,14 +30,6 @@ export const getPokemonDetail = (id) => {
   };
 };
 
-export const searchPokemon = (name) => {
-  return async (dispatch) => {
-    const response = await axios(`http://localhost:3001/pokemon?name=${name}`);
-    const pokemon = response.data;
-    dispatch({ type: SEARCH_POKEMON, payload: pokemon });
-  };
-};
-
 export const getTypes = () => {
   return async (dispatch) => {
     const response = await axios(`http://localhost:3001/type`);
@@ -59,38 +46,9 @@ export const createPokemon = (form) => {
   };
 };
 
-export const typeFilter = (value) => {
-  return (dispatch, getState) => {
-    const { pokemons } = getState();
-    const filteredPokemons = pokemons.filter(pokemon =>
-      pokemon.types.includes(value)
-    );
-    dispatch({ type: FILTERED_BY_TYPES, payload: filteredPokemons });
-  };
-};
-
 export const setPage = (page) => ({
   type: SET_PAGE,
   payload: page,
 });
-
-export const setItemsPerPage = (itemsPerPage) => ({
-  type: SET_ITEMS_PER_PAGE,
-  payload: itemsPerPage,
-});
-
-export const setOrder = (order) => {
-  return {
-    type: SET_ORDER,
-    payload: order,
-  };
-};
-
-export const setFilter = (filter) => {
-  return {
-    type: SET_FILTER,
-    payload: filter,
-  };
-};
 
 

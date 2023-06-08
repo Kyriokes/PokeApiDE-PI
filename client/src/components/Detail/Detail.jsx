@@ -6,17 +6,13 @@ import { getPokemonDetail } from "../../redux/action";
 
 function Detail() {
   const { id } = useParams();
-  // console.log("id", id );
   const dispatch = useDispatch();
-  // console.log("dispatch",dispatch);
   useEffect(() => {
     dispatch(getPokemonDetail(id));
   }, [dispatch, id]);
 
   const state = useSelector((state) => state.detail);
-  // console.log("state",state);
   const pokemon = state;
-  // console.log("pokemon",pokemon);
 
   return (
     <div className={style.container}>

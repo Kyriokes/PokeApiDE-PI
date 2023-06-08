@@ -25,7 +25,7 @@ function SearchBar() {
   };
 
   return (
-    <div className={style.bonita}>
+    <div className={style.bar}>
       <input
         placeholder="Search a Pokemon"
         type="search"
@@ -38,5 +38,4 @@ function SearchBar() {
     </div>
   );
 }
-
 export default SearchBar;

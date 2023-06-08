@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import Card from "../Card/Card";
 import Pagination from "../../Pagination/Pagination";
-import { setPage } from "../../../redux/action";
-import { getTypes } from "../../../redux/action";
+import { setPage, getTypes } from "../../../redux/action";
 import style from "./Cards.module.css";
 
 const Cards = () => {
@@ -25,7 +24,7 @@ const Cards = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(setPage(1)); // Reset the current page to 1 when filtering or changing the Pokemon type
+    dispatch(setPage(1));
   }, [selectedType, pokemonType, dispatch]);
 
   let pokeCopy = pokemons instanceof Array ? [...pokemons] : [];

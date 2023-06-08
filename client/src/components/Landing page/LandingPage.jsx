@@ -10,7 +10,6 @@ function LandingPage() {
         <NavLink to="/home" className={style.poke_box}>
           <div className={style.pokeball}>
             <div className={style.pokeball__button}></div>
-            {/* <NavLink to="/home" className={style.button}>Welcome, click me to Start!</NavLink> */}
           </div>
           </NavLink>
         <p className={style.clickMe}>Click on the pokéball to start!</p>
