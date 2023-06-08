@@ -11,25 +11,25 @@ const Cards = () => {
   const types = useSelector((state) => state.types);
   const pokemons = useSelector((state) => state.pokemons);
   const pagination = useSelector((state) => state.pagination);
-  
   const [selectedType, setSelectedType] = useState("");
   const [pokemonType, setPokemonType] = useState("");
   const [order, setOrder] = useState("");
-  
+
   const dispatch = useDispatch();
-  const { thisPage, totalPages, itemsPerPage } = pagination;
-  
+  const { thisPage, itemsPerPage } = pagination;
+
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     dispatch(getTypes());
   }, [dispatch]);
 
-  const startIndex = (thisPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  useEffect(() => {
+    dispatch(setPage(1)); // Reset the current page to 1 when filtering or changing the Pokemon type
+  }, [selectedType, pokemonType, dispatch]);
 
-  let pokeCopy = pokemons ? [...pokemons] : [];
-  
+  let pokeCopy = pokemons instanceof Array ? [...pokemons] : [];
+
   switch (pokemonType) {
     case "API":
       pokeCopy = pokeCopy.filter((poke) => typeof poke.id === "number");
@@ -40,11 +40,11 @@ const Cards = () => {
     default:
       break;
   }
-  
+
   const filteredPokemons = selectedType
     ? pokeCopy.filter((poke) => poke.types.includes(selectedType))
     : pokeCopy;
-  
+
   const orderedPokemons = filteredPokemons.slice().sort((a, b) => {
     switch (order) {
       case "asc":
@@ -59,24 +59,29 @@ const Cards = () => {
         return 0;
     }
   });
-  
+
+  const totalPages = Math.ceil(orderedPokemons.length / itemsPerPage);
+
+  const startIndex = (thisPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   const thisPagePokemons = orderedPokemons.slice(startIndex, endIndex);
-  
+
   const handlePageChange = (page) => {
     dispatch(setPage(page));
   };
-  
+
   const handleChange = (event) => {
     setPokemonType(event.target.value);
   };
-  
+
   const handleChangeType = (event) => {
     setSelectedType(event.target.value);
   };
-  
+
   const handleOrderChange = (event) => {
     const selectedOrder = event.target.value;
-  
+
     switch (selectedOrder) {
       case "A":
         setOrder("asc");
@@ -95,54 +100,68 @@ const Cards = () => {
         break;
     }
   };
-  
+
   return (
     <div className={style.container}>
-      <select className={style.order} onChange={handleOrderChange}>
-        <option value="A">A-Z Abc</option>
-        <option value="Z">Z-A Abc</option>
-        <option value="MAX">Max to Min Attack</option>
-        <option value="MIN">Min to Max Attack</option>
-      </select>
-  
-      <select className={style.filter} value={pokemonType} onChange={handleChange}>
-        <option value="ALL">All</option>
-        <option value="API">Vanilla</option>
-        <option value="DB">User created</option>
-      </select>
-  
-      {types && types.length > 0 && (
-        <select className={style.filter} value={selectedType} onChange={handleChangeType}>
-          <option value="">All Types</option>
-          {types.map((type) => (
-            <option value={type.name} key={type.name}>
-              {type.name}
-            </option>
-          ))}
+      <div className={style.filters}>
+        <select className={style.filter} onChange={handleOrderChange}>
+          <option value="default">Default</option>
+          <option value="A">A-Z Abc</option>
+          <option value="Z">Z-A Abc</option>
+          <option value="MAX">Max to Min Attack</option>
+          <option value="MIN">Min to Max Attack</option>
         </select>
-      )}
-  
-      {thisPagePokemons && thisPagePokemons.length > 0 ? (
-        thisPagePokemons.map((poke) => {
-          return (
-            <Card
-              key={poke.id}
-              id={poke.id}
-              name={poke.name}
-              image={poke.image}
-              height={poke.height}
-              weight={poke.weight}
-              hp={poke.hp}
-              attack={poke.attack}
-              defense={poke.defense}
-              speed={poke.speed}
-              types={poke.types}
-            />
-          );
-        })
-      ) : (
-        <div>No pokemons found.</div>
-      )}
+
+        <select
+          className={style.filter}
+          value={pokemonType}
+          onChange={handleChange}
+        >
+          <option value="ALL">All</option>
+          <option value="API">Vanilla</option>
+          <option value="DB">User created</option>
+        </select>
+
+        {types && types.length > 0 && (
+          <select
+            className={style.filter}
+            value={selectedType}
+            onChange={handleChangeType}
+          >
+            <option value="">All Types</option>
+            {types.map((type) => (
+              <option value={type.name} key={type.name}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      <div className={style.pokemon}>
+        {thisPagePokemons && thisPagePokemons.length > 0 ? (
+          thisPagePokemons.map((poke) => {
+            return (
+              <Card
+                key={poke.id}
+                id={poke.id}
+                name={poke.name}
+                image={poke.image}
+                height={poke.height}
+                weight={poke.weight}
+                hp={poke.hp}
+                attack={poke.attack}
+                defense={poke.defense}
+                speed={poke.speed}
+                types={poke.types}
+              />
+            );
+          })
+        ) : (
+          <div>No pokemons found.</div>
+        )}
+      </div>
+
       {!pathname.includes("detail") && (
         <div className={style.pagination}>
           <Pagination

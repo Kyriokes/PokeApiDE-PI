@@ -5,7 +5,7 @@ function pokeData(poke) {
   //para crear los objetos con la info de los pokemons
   return {
     id: poke.data.id,
-    name:  poke.data.name.charAt(0).toUpperCase() + poke.data.name.slice(1),
+    name:  poke.data.name.charAt(0).toUpperCase() + poke.data.name.slice(1).toLowerCase(),
     // poke.data.name,
     image: poke.data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'] || poke.data.sprites.front_default,
     // image: poke.data.sprites.front_default,
@@ -144,8 +144,3 @@ module.exports = {
   createPokemon,
 };
 
-// const getPokemonsApi = async () => {
-//     const api = await axios(
-//         "https://pokeapi.co/api/v2/pokemon"
-//     )
-// }

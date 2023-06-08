@@ -15,10 +15,11 @@
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black, 0px 0px 4px white;
     border: 1px solid black;
     border-radius: 5px;
+    background-color: #34345882;
 }
 
 .link:hover {
-    color: #ff0000; 
+    color: #fbcc0e;
     text-shadow: none;
-    background-color: #343458;
+    background-color: #343458d9;
 }

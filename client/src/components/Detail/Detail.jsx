@@ -20,7 +20,7 @@ function Detail() {
 
   return (
     <div className={style.container}>
-      <div className={style.algo}>
+      
         <h1 className={style.name}>{pokemon?.name}</h1>
         <img src={pokemon?.image} alt={pokemon?.name} className={style.image} />
         <div className={style.stats}>
@@ -40,7 +40,7 @@ function Detail() {
               ))}
           </div>
         </div>
-      </div>
+      
     </div>
   );
 }

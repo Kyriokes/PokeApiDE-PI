@@ -2,11 +2,12 @@ import style from "./Form.module.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import validate from "./Validate";
-import { getTypes, createPokemon } from "../../redux/action";
+import { getTypes, createPokemon, getPokemons } from "../../redux/action";
+import { useNavigate } from "react-router-dom";
 
 function Form() {
   const types = useSelector((state) => state.types);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,8 +26,6 @@ function Form() {
     types: [],
   });
 
-  console.log(`form arriba: ${form.types}`);
-
   const [errors, setErrors] = useState({});
 
   const changeHandler = (event) => {
@@ -43,24 +42,24 @@ function Form() {
   };
 
   const selectHandler = (event) => {
-    let name = [];
-    console.log(`el array:   ${event.target.value}`);
     if (event.target.name === "type 1") {
-      name.push(event.target.value);
+      setForm((prevForm) => ({
+        ...prevForm,
+        types: [event.target.value, prevForm.types[1] || ""],
+      }));
     }
+
     if (event.target.name === "type 2") {
-      name.push(event.target.value);
+      setForm((prevForm) => ({
+        ...prevForm,
+        types: [prevForm.types[0] || "", event.target.value],
+      }));
     }
-    setForm({
-      ...form,
-      types: [...form.types, ...name],
-    });
-    console.log(`form abajo: ${form}`);
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    const NewPoke = { 
+    const NewPoke = {
       name: form.name.toLowerCase(),
       sprites: form.image,
       hp: Number(form.hp),
@@ -71,14 +70,10 @@ function Form() {
       weight: Number(form.weight),
       types: form.types,
     };
-    console.log("form abajo:", JSON.stringify(form));
-    console.log("NewPoke abajo:", JSON.stringify(NewPoke));
-
     alert(`A Wild ${form.name} has Appeared`);
-    dispatch(createPokemon(NewPoke))
-
-    console.log(`form abajo: ${form}`);
-    console.log(`NewPoke abajo: ${NewPoke}`);
+    dispatch(createPokemon(NewPoke));
+    dispatch(getPokemons());
+    navigate("/home");
   };
 
   return (
@@ -165,9 +160,6 @@ function Form() {
           />
         </div>
         {errors.image && <p>{errors.image}</p>}
-
-
-
         <div className={style.typeOne}>
           <label>type 1: </label>
           <select name="type 1" onChange={(select) => selectHandler(select)}>
@@ -177,23 +169,7 @@ function Form() {
               </option>
             ))}
           </select>
-          </div>
-
-
-
-          {/* <div className={style.typeTwo}>
-          <label>type 1: </label>
-          <select name="type 2" onChange={(select) => selectHandler(select)}>
-            {types?.map((type) => (
-              <option value={type.name} key={type.name}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-          </div> */}
-
-
-
+        </div>
         {form.types.length > 0 ? (
           <div className={style.typeTwo}>
             <label>type 2: </label>
@@ -208,7 +184,6 @@ function Form() {
         ) : (
           <div></div>
         )}
-
         <button type="submit">SUBMIT</button>
       </form>
     </div>

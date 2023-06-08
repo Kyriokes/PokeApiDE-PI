@@ -1,3 +1,4 @@
+import React from 'react';
 import style from './Pagination.module.css';
 
 const Pagination = ({ thisPage, totalPages, pageChange }) => {
@@ -18,15 +19,19 @@ const Pagination = ({ thisPage, totalPages, pageChange }) => {
   };
 
   const visiblePageCount = 9;
-
   const startPage = Math.max(1, thisPage - Math.floor(visiblePageCount / 2));
   const endPage = Math.min(startPage + visiblePageCount - 1, totalPages);
 
+  const showPrevButton = thisPage > 1;
+  const showNextButton = thisPage < totalPages;
+
   return (
     <div className={style.container}>
-      <button onClick={handlePrePage} disabled={thisPage === 1} className={style.pag}>
-        Previous
-      </button>
+      {showPrevButton && (
+        <button onClick={handlePrePage} className={style.pag}>
+          Previous
+        </button>
+      )}
       {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map((page) => (
         <button
           className={style.pag}
@@ -37,9 +42,11 @@ const Pagination = ({ thisPage, totalPages, pageChange }) => {
           {page}
         </button>
       ))}
-      <button onClick={handleNextPage} disabled={thisPage === totalPages} className={style.pag}>
-        Next
-      </button>
+      {showNextButton && (
+        <button onClick={handleNextPage} className={style.pag}>
+          Next
+        </button>
+      )}
     </div>
   );
 };

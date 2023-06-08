@@ -21,12 +21,11 @@ function SearchBar() {
   };
 
   const handleChange = (event) => {
-    setPokemonName( event.target.value.toLowerCase());
+    setPokemonName(event.target.value.toLowerCase());
   };
 
   return (
     <div className={style.bonita}>
-        
       <input
         placeholder="Search a Pokemon"
         type="search"
